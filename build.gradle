@@ -22,6 +22,9 @@ dependencies {
     implementation("io.micronaut.liquibase:micronaut-liquibase")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
 
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.assertj:assertj-core")
+
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 }

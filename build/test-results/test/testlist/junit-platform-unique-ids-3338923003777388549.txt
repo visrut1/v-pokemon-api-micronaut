@@ -1,0 +1,2 @@
+[engine:junit-jupiter]/[class:com.pokemon_api.DemoTest]/[method:testItWorks()]
+[engine:junit-jupiter]/[class:com.pokemon_api.pokemon.PokemonServiceShould]/[method:shouldReturnPokemonList()]

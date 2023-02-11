@@ -23,6 +23,13 @@ public class Pokemon {
 
   public Pokemon() {}
 
+  public Pokemon(int id, String name, Power power, String imageUrl) {
+    this.id = id;
+    this.name = name;
+    this.power = power;
+    this.imageUrl = imageUrl;
+  }
+
   public int getId() {
     return id;
   }
