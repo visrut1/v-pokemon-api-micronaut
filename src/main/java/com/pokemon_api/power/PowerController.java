@@ -1,7 +1,6 @@
 package com.pokemon_api.power;
 
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -23,7 +22,7 @@ public class PowerController {
   }
 
   @Post
-  public MutableHttpResponse<Power> post(@Body Power power) {
+  public HttpResponse<Power> post(@Body Power power) {
     return HttpResponse.created(powerService.create(power));
   }
 }

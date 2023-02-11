@@ -5,5 +5,5 @@ import io.micronaut.data.repository.CrudRepository;
 
 @Repository
 interface PowerRepository extends CrudRepository<Power, Integer> {
-  Power getByName(String name);
+  Power findByName(String name);
 }

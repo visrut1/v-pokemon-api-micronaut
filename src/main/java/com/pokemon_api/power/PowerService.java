@@ -17,7 +17,7 @@ public class PowerService {
   }
 
   public Power getByName(String name) {
-    return powerRepository.getByName(name);
+    return powerRepository.findByName(name);
   }
 
   public Power create(Power power) {
