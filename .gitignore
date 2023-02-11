@@ -1,4 +1,4 @@
-build
+/build
 *.class
-bin
-demo
+/bin
+/demo

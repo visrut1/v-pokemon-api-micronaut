@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.pokemon_api.pokemon.PokemonServiceShould" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-02-11T09:42:21" hostname="visrut-inspiron5593" time="0.259">
-  <properties/>
-  <testcase name="shouldReturnPokemonList()" classname="com.pokemon_api.pokemon.PokemonServiceShould" time="0.259"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
