@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: ["with-data-jpa"]
+    branches: ["with-data-jpa", "with-liquibase"]
   pull_request:
     branches: ["with-data-jpa"]
 
