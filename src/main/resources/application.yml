@@ -1,6 +1,13 @@
 micronaut:
   application:
-    name: demo
+    name: pokemon
+  server:
+    cors:
+      enabled: true
+      configurations:
+        ui:
+          allowed-origins:
+            - http://localhost:3000
 netty:
   default:
     allocator:

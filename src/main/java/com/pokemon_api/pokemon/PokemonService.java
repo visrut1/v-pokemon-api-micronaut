@@ -46,12 +46,12 @@ public class PokemonService {
     Power power = powerService.getByName(pokemonCreationForm.getPowerName());
     pokemon.setName(pokemonCreationForm.getName());
     pokemon.setPower(power);
-    pokemonRepository.save(pokemon);
+    Pokemon updatedPokemon = pokemonRepository.save(pokemon);
     pokemon.setImageUrl(
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
             + pokemon.getId()
             + ".png");
-    return pokemon;
+    return updatedPokemon;
   }
 
   public Pokemon delete(int id) {
@@ -62,6 +62,9 @@ public class PokemonService {
 
   public Pokemon update(PokemonUpdationForm pokemonUpdationForm) {
     Pokemon pokemon = getPokemonById(pokemonUpdationForm.getId());
+    if (pokemonRepository.findByNameIgnoreCase(pokemonUpdationForm.getName()).isPresent())
+      throw new EntityAlreadyExist(
+          "pokemon with the name %s already exists.".formatted(pokemon.getName()));
     pokemon.setName(pokemonUpdationForm.getName());
     pokemon.setImageUrl(pokemonUpdationForm.getImageUrl());
     Power power = powerService.getByName(pokemonUpdationForm.getPowerName());

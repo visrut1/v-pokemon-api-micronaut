@@ -1,5 +1,6 @@
 package com.pokemon_api.power;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,5 +40,13 @@ public class PowerServiceShould {
   }
 
   @Test
-  void create() {}
+  void create() {
+    Mockito.when(powerRepository.save(Mockito.any())).thenReturn(power1);
+
+    var returnedPower = powerService.create(power1);
+
+    Mockito.verify(powerRepository).save(Mockito.any());
+
+    Assertions.assertThat(returnedPower).isEqualTo(power1);
+  }
 }

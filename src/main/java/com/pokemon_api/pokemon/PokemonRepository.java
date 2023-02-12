@@ -11,4 +11,6 @@ interface PokemonRepository extends CrudRepository<Pokemon, Integer> {
   void deleteById(int id);
 
   Optional<Pokemon> findByName(String name);
+
+  Optional<Pokemon> findByNameIgnoreCase(String name);
 }

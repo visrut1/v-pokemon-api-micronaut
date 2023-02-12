@@ -3,15 +3,17 @@ package com.pokemon_api.pokemon;
 import java.util.List;
 import java.util.Optional;
 
+import com.pokemon_api.pokemon.forms.PokemonCreationForm;
+import com.pokemon_api.pokemon.forms.PokemonUpdationForm;
 import com.pokemon_api.power.Power;
 import com.pokemon_api.power.PowerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 
 class PokemonServiceShould {
   private PokemonRepository pokemonRepository;
@@ -53,7 +55,13 @@ class PokemonServiceShould {
   }
 
   @Test
-  void shouldCreate() {}
+  void shouldCreate() {
+    PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("Bulbasaur", "grass");
+    Mockito.when(pokemonRepository.save(Mockito.any())).thenReturn(pokemon1);
+    var returnedPokemon = pokemonService.create(pokemonCreationForm);
+    Mockito.verify(pokemonRepository).save(Mockito.any());
+    Assertions.assertThat(returnedPokemon).isEqualTo(pokemon1);
+  }
 
   @Test
   void shouldDelete() {
@@ -63,5 +71,20 @@ class PokemonServiceShould {
   }
 
   @Test
-  void shouldUpdate() {}
+  void shouldUpdate() {
+    PokemonUpdationForm pokemonUpdationForm =
+        new PokemonUpdationForm(1, "Bulbasaur", "grass", "image.com/1.png");
+
+    Mockito.when(pokemonRepository.update(Mockito.any())).thenReturn(pokemon1);
+    Mockito.when(pokemonRepository.findByName(anyString())).thenReturn(null);
+    Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.ofNullable(pokemon1));
+
+    var returnedPokemon = pokemonService.update(pokemonUpdationForm);
+
+    Mockito.verify(pokemonRepository).update(Mockito.any());
+    Mockito.verify(pokemonRepository).findById(anyInt());
+    Mockito.verify(pokemonRepository).findByNameIgnoreCase(anyString());
+
+    Assertions.assertThat(returnedPokemon).isEqualTo(pokemon1);
+  }
 }
