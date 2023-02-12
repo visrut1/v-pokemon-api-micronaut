@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 public class Pokemon {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
   @NotEmpty
@@ -20,7 +20,7 @@ public class Pokemon {
   @JoinColumn(referencedColumnName = "id", name = "power")
   private Power power;
 
-  @Column(nullable = false)
+  @Column(nullable = false, name = "image_url")
   private String imageUrl = "";
 
   public Pokemon() {}
