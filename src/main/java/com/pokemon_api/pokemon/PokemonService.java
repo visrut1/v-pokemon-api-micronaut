@@ -1,5 +1,6 @@
 package com.pokemon_api.pokemon;
 
+import com.pokemon_api.pokemon.exceptions.EmptyValue;
 import com.pokemon_api.pokemon.exceptions.EntityAlreadyExist;
 import com.pokemon_api.pokemon.exceptions.EntityNotFound;
 import com.pokemon_api.pokemon.forms.PokemonCreationForm;
@@ -14,8 +15,8 @@ import java.util.Optional;
 
 @Singleton
 public class PokemonService {
-  PokemonRepository pokemonRepository;
-  PowerService powerService;
+  private PokemonRepository pokemonRepository;
+  private PowerService powerService;
 
   public PokemonService(PokemonRepository pokemonRepository, PowerService powerService) {
     this.pokemonRepository = pokemonRepository;
@@ -38,6 +39,11 @@ public class PokemonService {
 
   @Transactional
   public Pokemon create(PokemonCreationForm pokemonCreationForm) {
+    if (pokemonCreationForm.getName().isEmpty())
+      throw new EmptyValue("pokemon name should not be empty");
+    if (pokemonCreationForm.getPowerName().isEmpty())
+      throw new EmptyValue("power name should not be empty");
+
     Optional<Pokemon> _pokemon = pokemonRepository.findByName(pokemonCreationForm.getName());
     if (_pokemon.isPresent())
       throw new EntityAlreadyExist(
@@ -51,6 +57,7 @@ public class PokemonService {
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
             + pokemon.getId()
             + ".png");
+
     return updatedPokemon;
   }
 
@@ -70,5 +77,12 @@ public class PokemonService {
     Power power = powerService.getByName(pokemonUpdationForm.getPowerName());
     pokemon.setPower(power);
     return pokemonRepository.update(pokemon);
+  }
+
+  public Pokemon getByName(String name) {
+    return pokemonRepository
+        .findByNameIgnoreCase(name)
+        .orElseThrow(
+            () -> new EntityNotFound("pokemon with name '%s' don't exist".formatted(name)));
   }
 }

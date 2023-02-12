@@ -1,11 +1,13 @@
 package com.pokemon_api.power;
 
+import com.pokemon_api.pokemon.exceptions.EntityNotFound;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -34,7 +36,7 @@ public class PowerServiceShould {
 
   @Test
   void getByName() {
-    Mockito.when(powerRepository.findByName(anyString())).thenReturn(power1);
+    Mockito.when(powerRepository.findByName(anyString())).thenReturn(Optional.ofNullable(power1));
     powerService.getByName("fire");
     Mockito.verify(powerRepository).findByName(anyString());
   }
@@ -48,5 +50,16 @@ public class PowerServiceShould {
     Mockito.verify(powerRepository).save(Mockito.any());
 
     Assertions.assertThat(returnedPower).isEqualTo(power1);
+  }
+
+  @Test
+  void shouldThrowExceptionWhenPowerNotExist() {
+    Mockito.when(powerRepository.findByName(anyString())).thenReturn(Optional.empty());
+    Assertions.assertThatThrownBy(
+        () -> {
+          powerService.getByName(anyString());
+        });
+    Assertions.catchThrowableOfType(
+        () -> powerService.getByName(anyString()), EntityNotFound.class);
   }
 }

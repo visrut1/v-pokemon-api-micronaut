@@ -21,7 +21,12 @@ public class PokemonController {
     return HttpResponse.ok(pokemonService.get());
   }
 
-  @Get("/{id}")
+  @Get("/name/{name}")
+  public HttpResponse<Pokemon> fetch(@PathVariable("name") String name) {
+    return HttpResponse.ok(pokemonService.getByName(name));
+  }
+
+  @Get("/id/{id}")
   public HttpResponse<Pokemon> fetch(@PathVariable("id") int id) {
     return HttpResponse.ok(pokemonService.getById(id));
   }

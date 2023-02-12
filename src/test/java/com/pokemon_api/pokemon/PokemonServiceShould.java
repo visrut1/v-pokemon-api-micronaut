@@ -3,6 +3,9 @@ package com.pokemon_api.pokemon;
 import java.util.List;
 import java.util.Optional;
 
+import com.pokemon_api.pokemon.exceptions.EmptyValue;
+import com.pokemon_api.pokemon.exceptions.EntityAlreadyExist;
+import com.pokemon_api.pokemon.exceptions.EntityNotFound;
 import com.pokemon_api.pokemon.forms.PokemonCreationForm;
 import com.pokemon_api.pokemon.forms.PokemonUpdationForm;
 import com.pokemon_api.power.Power;
@@ -12,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static java.util.Optional.empty;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -76,7 +80,7 @@ class PokemonServiceShould {
         new PokemonUpdationForm(1, "Bulbasaur", "grass", "image.com/1.png");
 
     Mockito.when(pokemonRepository.update(Mockito.any())).thenReturn(pokemon1);
-    Mockito.when(pokemonRepository.findByName(anyString())).thenReturn(null);
+    Mockito.when(pokemonRepository.findByName(anyString())).thenReturn(empty());
     Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.ofNullable(pokemon1));
 
     var returnedPokemon = pokemonService.update(pokemonUpdationForm);
@@ -86,5 +90,58 @@ class PokemonServiceShould {
     Mockito.verify(pokemonRepository).findByNameIgnoreCase(anyString());
 
     Assertions.assertThat(returnedPokemon).isEqualTo(pokemon1);
+  }
+
+  @Test
+  void shouldThrowExceptionOnEmptyName() {
+    PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("", "");
+    Assertions.assertThatThrownBy(
+        () -> {
+          pokemonService.create(pokemonCreationForm);
+        });
+    Assertions.catchThrowableOfType(
+        () -> pokemonService.create(pokemonCreationForm), EmptyValue.class);
+  }
+
+  @Test
+  void shouldThrowExceptionOnEmptyPower() {
+    PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("pikachu", "");
+    Assertions.assertThatThrownBy(
+        () -> {
+          pokemonService.create(pokemonCreationForm);
+        });
+    Assertions.catchThrowableOfType(
+        () -> pokemonService.create(pokemonCreationForm), EmptyValue.class);
+  }
+
+  @Test
+  void shouldThrowExceptionIfPokemonAlreadyExistOnCreate() {
+    Mockito.when(pokemonRepository.findByName(anyString()))
+        .thenReturn(Optional.ofNullable(pokemon1));
+
+    PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("Bulbasaur", "imageUrl");
+    Assertions.catchThrowableOfType(
+        () -> pokemonService.create(pokemonCreationForm), EntityAlreadyExist.class);
+
+    Mockito.verify(pokemonRepository).findByName(anyString());
+  }
+
+  @Test
+  void shouldReturnPokemonByName() {
+    Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString()))
+        .thenReturn(Optional.ofNullable(pokemon1));
+
+    Pokemon returnedPokemon = pokemonService.getByName(anyString());
+
+    Mockito.verify(pokemonRepository).findByNameIgnoreCase(anyString());
+    Assertions.assertThat(returnedPokemon).isEqualTo(pokemon1);
+  }
+
+  @Test
+  void shouldThrowExceptionWhenNotFoundByName() {
+    Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString())).thenReturn(Optional.empty());
+    Assertions.catchThrowableOfType(
+        () -> pokemonService.getByName(anyString()), EntityNotFound.class);
+    Mockito.verify(pokemonRepository).findByNameIgnoreCase(anyString());
   }
 }

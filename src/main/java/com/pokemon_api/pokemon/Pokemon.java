@@ -2,6 +2,7 @@ package com.pokemon_api.pokemon;
 
 import com.pokemon_api.power.Power;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "pokemon")
@@ -11,6 +12,7 @@ public class Pokemon {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private int id;
 
+  @NotEmpty
   @Column(unique = true, nullable = false)
   private String name;
 

@@ -1,5 +1,6 @@
 package com.pokemon_api.power;
 
+import com.pokemon_api.pokemon.exceptions.EntityNotFound;
 import jakarta.inject.Singleton;
 
 import java.util.List;
@@ -17,7 +18,10 @@ public class PowerService {
   }
 
   public Power getByName(String name) {
-    return powerRepository.findByName(name);
+    return powerRepository
+        .findByName(name)
+        .orElseThrow(
+            () -> new EntityNotFound("power with name '%s' does not exist".formatted(name)));
   }
 
   public Power create(Power power) {
