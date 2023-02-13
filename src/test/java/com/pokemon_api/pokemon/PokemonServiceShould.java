@@ -12,6 +12,7 @@ import com.pokemon_api.power.Power;
 import com.pokemon_api.power.PowerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -42,6 +43,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should display all pokemons")
   void shouldGet() {
     Mockito.when(pokemonRepository.findAll()).thenReturn(List.of(pokemon1, pokemon2));
     List<Pokemon> pokemonList = pokemonService.get();
@@ -51,6 +53,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should display pokemon by id")
   void shouldGetById() {
     Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.ofNullable(pokemon1));
     Pokemon pokemonFromService = pokemonService.getById(1);
@@ -59,6 +62,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should create pokemon")
   void shouldCreate() {
     PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("Bulbasaur", "grass");
     Mockito.when(pokemonRepository.save(Mockito.any())).thenReturn(pokemon1);
@@ -68,6 +72,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should delete pokemon")
   void shouldDelete() {
     Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.ofNullable(pokemon1));
     pokemonService.delete(anyInt());
@@ -75,6 +80,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should update pokemon")
   void shouldUpdate() {
     PokemonUpdationForm pokemonUpdationForm =
         new PokemonUpdationForm(1, "Bulbasaur", "grass", "image.com/1.png");
@@ -93,6 +99,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should throw exception when creating pokemon with empty name")
   void shouldThrowExceptionOnEmptyName() {
     PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("", "");
     Assertions.assertThatThrownBy(
@@ -104,6 +111,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should throw exception when creating pokemon with empty power name")
   void shouldThrowExceptionOnEmptyPower() {
     PokemonCreationForm pokemonCreationForm = new PokemonCreationForm("pikachu", "");
     Assertions.assertThatThrownBy(
@@ -115,6 +123,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should throw exception when creating pokemon which is already exists.")
   void shouldThrowExceptionIfPokemonAlreadyExistOnCreate() {
     Mockito.when(pokemonRepository.findByName(anyString()))
         .thenReturn(Optional.ofNullable(pokemon1));
@@ -127,6 +136,7 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should return pokemon by name.")
   void shouldReturnPokemonByName() {
     Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString()))
         .thenReturn(Optional.ofNullable(pokemon1));
@@ -138,10 +148,33 @@ class PokemonServiceShould {
   }
 
   @Test
+  @DisplayName("should throw exception when pokemon not found by name.")
   void shouldThrowExceptionWhenNotFoundByName() {
     Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString())).thenReturn(Optional.empty());
     Assertions.catchThrowableOfType(
         () -> pokemonService.getByName(anyString()), EntityNotFound.class);
     Mockito.verify(pokemonRepository).findByNameIgnoreCase(anyString());
+  }
+
+  @Test
+  @DisplayName("should throw exception when pokemon not found by id.")
+  void shouldThrowExceptionWhenUpdatingPokemonWhichDoesNotExistById() {
+    Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.empty());
+    PokemonUpdationForm pokemonUpdationForm =
+        new PokemonUpdationForm(1, "Bulbasaur", "grass", "image.com/1.png");
+    Assertions.catchThrowableOfType(
+        () -> pokemonService.update(pokemonUpdationForm), EntityNotFound.class);
+  }
+
+  @Test
+  @DisplayName("should throw exception when pokemon with name already exist.")
+  void shouldThrowExceptionWhenPokemonWithNameAlreadyExist() {
+    Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.ofNullable(pokemon1));
+    Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString()))
+        .thenReturn(Optional.ofNullable(pokemon1));
+    PokemonUpdationForm pokemonUpdationForm =
+        new PokemonUpdationForm(1, "Bulbasaur", "grass", "image.com/1.png");
+    Assertions.catchThrowableOfType(
+        () -> pokemonService.update(pokemonUpdationForm), EntityAlreadyExist.class);
   }
 }

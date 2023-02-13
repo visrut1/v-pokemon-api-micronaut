@@ -3,6 +3,7 @@ package com.pokemon_api.power;
 import com.pokemon_api.pokemon.exceptions.EntityNotFound;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -28,6 +29,7 @@ public class PowerServiceShould {
   }
 
   @Test
+  @DisplayName("should get all powers.")
   void get() {
     Mockito.when(powerRepository.findAll()).thenReturn(List.of(power1, power2));
     powerService.get();
@@ -35,6 +37,7 @@ public class PowerServiceShould {
   }
 
   @Test
+  @DisplayName("should get power by name.")
   void getByName() {
     Mockito.when(powerRepository.findByName(anyString())).thenReturn(Optional.ofNullable(power1));
     powerService.getByName("fire");
@@ -42,6 +45,7 @@ public class PowerServiceShould {
   }
 
   @Test
+  @DisplayName("should create power.")
   void create() {
     Mockito.when(powerRepository.save(Mockito.any())).thenReturn(power1);
 
@@ -53,6 +57,7 @@ public class PowerServiceShould {
   }
 
   @Test
+  @DisplayName("should throw exception when power not exist.")
   void shouldThrowExceptionWhenPowerNotExist() {
     Mockito.when(powerRepository.findByName(anyString())).thenReturn(Optional.empty());
     Assertions.assertThatThrownBy(
