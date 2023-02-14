@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pokemon-api-jar
-          path: build/libs/demo-0.1-all.jar
+          path: build/libs/*-all.jar
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
