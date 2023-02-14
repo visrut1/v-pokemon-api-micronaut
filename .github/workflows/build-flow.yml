@@ -19,3 +19,8 @@ jobs:
         run: chmod +x gradlew
       - name: Run gradle build
         run: ./gradlew build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pokemon-api-jar
+          path: build/libs/demo-0.1-all.jar
