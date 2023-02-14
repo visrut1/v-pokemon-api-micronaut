@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pokemon-api-jar
-          path: build/libs/*-all.jar
+          path: build/libs/demo-0.1-all.jar
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -43,4 +43,4 @@ jobs:
           environment_name: ${{ env.AWS_BEANSTALK_APP_NAME }}
           version_label: ${{ github.sha }}
           region: ap-south-1
-          deployment_package: ./*-all.jar
+          deployment_package: demo-0.1-all.jar
