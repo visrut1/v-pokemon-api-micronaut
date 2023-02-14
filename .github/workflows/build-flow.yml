@@ -3,8 +3,6 @@ name: Gradle Package
 on:
   push:
     branches: ["with-data-jpa", "with-liquibase"]
-  release:
-    types: [created]
 
 jobs:
   build:
