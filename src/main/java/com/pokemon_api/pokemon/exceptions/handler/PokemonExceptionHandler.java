@@ -10,7 +10,7 @@ import jakarta.inject.Singleton;
 
 @Produces
 @Singleton
-@Requires(classes = {PokemonException.class})
+@Requires(classes = { PokemonException.class })
 public class PokemonExceptionHandler
     implements ExceptionHandler<PokemonException, HttpResponse<PokemonException>> {
   @Override
