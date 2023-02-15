@@ -2,6 +2,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.7.0"
     id("jacoco")
+    id("io.micronaut.test-resources") version "3.6.0"
 }
 
 version = "0.1"
@@ -25,6 +26,7 @@ dependencies {
 
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.assertj:assertj-core")
+    testImplementation("io.micronaut.test:micronaut-test-rest-assured")
 
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
