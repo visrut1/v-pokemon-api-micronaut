@@ -1,0 +1,9 @@
+datasources:
+  default:
+    url: jdbc:tc:mariadb://localhost;databaseName=test?TC_DAEMON=true
+    db-type: mariadb
+    dialect: MYSQL
+    username: test
+    password: test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    jdbc-url: jdbc:tc:mariadb:latest:///test

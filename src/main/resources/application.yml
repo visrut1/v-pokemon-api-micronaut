@@ -20,17 +20,6 @@ datasources:
     jdbc-url: jdbc:mariadb://localhost:4000/pokemon
     username: example-user
     password: my_cool_secret
-test-resources:
-  containers:
-    mariadb:
-      image-name: mariadb:latest
-  default:
-    dialect: MYSQL
-    username: test
-    password: test
-    db-type: mariadb
-    jdbc-url: jdbc:tc:mariadb://localhost/test
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
 liquibase:
   datasources:
     default:
